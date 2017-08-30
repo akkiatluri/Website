@@ -1,0 +1,24 @@
+---
+title: "dplyr"
+output: html_document
+---
+
+# This is a first-level header
+## This is a second-level header
+### This is a third-leavel header
+
+To make a paragraph, just type normally
+
+* item 1
+* item 2
+* item 3
+* item 4
+
+Team | Leauge
+---|---
+Phillies | National
+Yankess | American
+Cubs | National
+Red sox | American
+
+<img src = "city.jpg" width="700" />
