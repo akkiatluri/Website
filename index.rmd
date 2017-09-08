@@ -2,8 +2,11 @@
 title: "dplyr"
 output: html_document
 ---
+<img src="image.jpg" width="200px" />
 
-## Filtering Columns and Rows
+
+#### My name is Akhilesh Atluri, I am an Graduate student majoring in Data Science at Mercyhurst University
+## Filtering Columns and Rows.
 
 when using dplyr, you can filter columns and rows by using select and filter. Let's look at an example using the Lahman baseball databse. we first have to load the Lahmna and dplyr packages
 
@@ -21,4 +24,51 @@ Batting%>%
 filter(teamID=="NYA" & yearID==1927)
 
 ```
+
+Now,the following code gives the list of all the players that have scored more than 40 homeruns from New York Yankees Team.
+
+```{r}
+Batting%>%
+  select(playerID,yearID,teamID,HR,SO,AB)%>%
+  filter(teamID == "NYA" & HR > 40)%>%
+  arrange(desc(HR))
+```
+
+Next let's find all the players from the data who has scored over 40 homeruns but have less than 60 strikeouts.
+
+```{r}
+Batting%>%
+  select(playerID,yearID,teamID,HR,SO)%>%
+  filter(SO < 60 ,HR >= 40)%>%
+  arrange(desc(HR))
+```
+
+If we want to see players with more than 30 homeruns scored from Phillies in 1970's we can use the following code.
+
+```{r}
+Batting%>%
+  select(playerID,yearID,teamID,HR,SO,AB)%>%
+  filter(teamID == "PHI" & HR > 30 & yearID >=1970 & yearID <= 1979)%>%
+  arrange(desc(HR))
+```
+
+Lets see the list of all the players who have hit more than 50 homeruns and also sort them in descending order.
+
+```{r}
+Batting%>%
+  select(playerID,yearID,teamID,HR,SO, AB)%>%
+  filter(HR>50)%>%
+  arrange(desc(HR))
+```
+
+Lets now see all the players who have less than 10 strikeouts but have more than  400 at bats
+
+```{r}
+Batting%>%
+  select(playerID,yearID,teamID,HR,SO, AB)%>%
+  filter(SO < 10 & AB > 400)%>%
+  arrange(SO)
+```
+
+
 
