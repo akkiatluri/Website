@@ -127,8 +127,14 @@ $(document).ready(function () {
 <div id="filtering-columns-and-rows." class="section level2">
 <h2>Filtering Columns and Rows.</h2>
 <p>when using dplyr, you can filter columns and rows by using select and filter. Let’s look at an example using the Lahman baseball databse. we first have to load the Lahmna and dplyr packages</p>
+</div>
+<div id="the-packages-required-to-run-the-code" class="section level2">
+<h2>The packages required to run the code</h2>
 <pre class="r"><code>library(Lahman)
 library(dplyr)</code></pre>
+</div>
+<div id="selecting-a-particular-column-in-the-dataframe" class="section level2">
+<h2>Selecting a particular Column in the dataframe</h2>
 <p>now , suppose we would like to see the homerun totals for the 1927 new york yankees. we could run the following code</p>
 <pre class="r"><code>Batting%&gt;%
   select(playerID,yearID,teamID,HR)%&gt;%
@@ -159,6 +165,9 @@ filter(teamID==&quot;NYA&quot; &amp; yearID==1927)</code></pre>
 ## 23 shockur01   1927    NYA  0
 ## 24 thomamy01   1927    NYA  0
 ## 25  weraju01   1927    NYA  1</code></pre>
+</div>
+<div id="arranging-a-column-in-descending-order" class="section level2">
+<h2>Arranging a Column in Descending Order</h2>
 <p>Now,the following code gives the list of all the players that have scored more than 40 homeruns from New York Yankees Team.</p>
 <pre class="r"><code>Batting%&gt;%
   select(playerID,yearID,teamID,HR,SO,AB)%&gt;%
@@ -195,6 +204,9 @@ filter(teamID==&quot;NYA&quot; &amp; yearID==1927)</code></pre>
 ## 28 giambja01   2003    NYA 41 140 535
 ## 29 grandcu01   2011    NYA 41 169 583</code></pre>
 <p>Next let’s find all the players from the data who has scored over 40 homeruns but have less than 60 strikeouts.</p>
+</div>
+<div id="f-iltering-rows-depending-on-the-statistics" class="section level2">
+<h2>F iltering rows depending on the statistics</h2>
 <pre class="r"><code>Batting%&gt;%
   select(playerID,yearID,teamID,HR,SO)%&gt;%
   filter(SO &lt; 60 ,HR &gt;= 40)%&gt;%
@@ -360,6 +372,81 @@ filter(teamID==&quot;NYA&quot; &amp; yearID==1927)</code></pre>
 ## 63 holmeto01   1945    BSN 28  9 636
 ## 64 boudrlo01   1948    CLE 18  9 560
 ## 65 mitchda01   1952    CLE  5  9 511</code></pre>
+</div>
+<div id="summarizing-and-creating-a-new-column" class="section level2">
+<h2>Summarizing and creating a new column</h2>
+<p>Lets calculate all the homeruns scored by Babe Ruth</p>
+<pre class="r"><code>Batting%&gt;%
+  filter(playerID=='ruthba01')%&gt;%
+  group_by(playerID)%&gt;%
+  summarize(career_HR=sum(HR))</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   playerID career_HR
+##      &lt;chr&gt;     &lt;int&gt;
+## 1 ruthba01       714</code></pre>
+<p>Lets find all the players having more than 600 homeruns with the higest on top of the table</p>
+<pre class="r"><code> Batting%&gt;%
+  group_by(playerID)%&gt;%
+  summarize(career_HR=sum(HR))%&gt;%
+  filter(career_HR&gt;=600)%&gt;%
+  arrange(desc(career_HR))</code></pre>
+<pre><code>## # A tibble: 8 x 2
+##    playerID career_HR
+##       &lt;chr&gt;     &lt;int&gt;
+## 1 bondsba01       762
+## 2 aaronha01       755
+## 3  ruthba01       714
+## 4 rodrial01       696
+## 5  mayswi01       660
+## 6 griffke02       630
+## 7 thomeji01       612
+## 8  sosasa01       609</code></pre>
+<p>Now lets look at the average homeruns of players who have average more than 30</p>
+<pre class="r"><code> Batting%&gt;%
+  group_by(playerID)%&gt;%
+  summarize(HRAvg=mean(HR))%&gt;%
+  filter(HRAvg&gt;30)%&gt;%
+  arrange(desc(HRAvg))</code></pre>
+<pre><code>## # A tibble: 13 x 2
+##     playerID    HRAvg
+##        &lt;chr&gt;    &lt;dbl&gt;
+##  1 pujolal01 36.93750
+##  2 bondsba01 34.63636
+##  3 mcgwima01 34.29412
+##  4 kinerra01 33.54545
+##  5 aaronha01 32.82609
+##  6 bryankr01 32.50000
+##  7  ruthba01 32.45455
+##  8  sosasa01 32.05263
+##  9 cabremi01 31.85714
+## 10 belleal01 31.75000
+## 11 rodrial01 31.63636
+## 12 schmimi01 30.44444
+## 13 abreujo02 30.33333</code></pre>
+<p>Lets see players who have hit more than 50 homeruns in a year since 1970</p>
+<pre class="r"><code>Batting%&gt;%
+  filter(yearID&gt;=1970)%&gt;%
+  group_by(playerID)%&gt;%
+  summarize(max_HR=max(HR))%&gt;%
+  filter(max_HR&gt;50)%&gt;%
+  arrange(desc(max_HR))</code></pre>
+<pre><code>## # A tibble: 14 x 2
+##     playerID max_HR
+##        &lt;chr&gt;  &lt;dbl&gt;
+##  1 bondsba01     73
+##  2 mcgwima01     70
+##  3  sosasa01     66
+##  4 howarry01     58
+##  5 gonzalu01     57
+##  6 rodrial01     57
+##  7 griffke02     56
+##  8 bautijo02     54
+##  9 ortizda01     54
+## 10 davisch02     53
+## 11 fostege01     52
+## 12 thomeji01     52
+## 13 fieldce01     51
+## 14 jonesan01     51</code></pre>
 </div>
 
 

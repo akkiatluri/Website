@@ -10,20 +10,25 @@ output: html_document
 
 when using dplyr, you can filter columns and rows by using select and filter. Let's look at an example using the Lahman baseball databse. we first have to load the Lahmna and dplyr packages
 
+## The packages required to run the code
 
 ```{r message =FALSE, warning=FALSE}
 library(Lahman)
 library(dplyr)
 ```
 
+## Selecting a particular Column in the dataframe
 now , suppose we would like to see the homerun totals for the 1927 new york yankees. we could run the following code
 
 ```{r}
+
 Batting%>%
   select(playerID,yearID,teamID,HR)%>%
 filter(teamID=="NYA" & yearID==1927)
 
 ```
+
+## Arranging a Column in Descending Order
 
 Now,the following code gives the list of all the players that have scored more than 40 homeruns from New York Yankees Team.
 
@@ -35,6 +40,8 @@ Batting%>%
 ```
 
 Next let's find all the players from the data who has scored over 40 homeruns but have less than 60 strikeouts.
+
+## F iltering rows depending on the statistics
 
 ```{r}
 Batting%>%
@@ -61,6 +68,7 @@ Batting%>%
   arrange(desc(HR))
 ```
 
+
 Lets now see all the players who have less than 10 strikeouts but have more than  400 at bats
 
 ```{r}
@@ -70,5 +78,42 @@ Batting%>%
   arrange(SO)
 ```
 
+## Summarizing and creating a new column
 
+Lets calculate all the homeruns scored by Babe Ruth 
 
+```{r}
+Batting%>%
+  filter(playerID=='ruthba01')%>%
+  group_by(playerID)%>%
+  summarize(career_HR=sum(HR))
+```
+Lets find all the players having more than 600 homeruns with the higest on top of the table
+```{r}
+ Batting%>%
+  group_by(playerID)%>%
+  summarize(career_HR=sum(HR))%>%
+  filter(career_HR>=600)%>%
+  arrange(desc(career_HR))
+```
+
+Now lets look at the average homeruns of players who have average more than 30
+
+```{r}
+ Batting%>%
+  group_by(playerID)%>%
+  summarize(HRAvg=mean(HR))%>%
+  filter(HRAvg>30)%>%
+  arrange(desc(HRAvg))
+```
+Lets see players who have hit more than 50 homeruns in a year since 1970
+
+```{r}
+Batting%>%
+  filter(yearID>=1970)%>%
+  group_by(playerID)%>%
+  summarize(max_HR=max(HR))%>%
+  filter(max_HR>50)%>%
+  arrange(desc(max_HR))
+  
+```
