@@ -41,7 +41,7 @@ Batting%>%
 
 Next let's find all the players from the data who has scored over 40 homeruns but have less than 60 strikeouts.
 
-## F iltering rows depending on the statistics
+## Filtering rows depending on the statistics
 
 ```{r}
 Batting%>%
